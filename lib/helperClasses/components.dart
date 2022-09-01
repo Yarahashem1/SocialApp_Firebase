@@ -1,14 +1,16 @@
+// ignore_for_file: unnecessary_new, sort_child_properties_last
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/cubit/cubit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 Widget defaultFormField({
-
   required TextEditingController controller,
   required TextInputType type,
   onSubmit,
   onChange,
- 
   onTap,
   bool isPassword = false,
   required validate,
@@ -19,7 +21,6 @@ Widget defaultFormField({
   bool isClickable = true,
 }) =>
     TextFormField(
-     
       controller: controller,
       keyboardType: type,
       obscureText: isPassword,
@@ -29,8 +30,7 @@ Widget defaultFormField({
       onTap: onTap,
       validator: validate,
       decoration: InputDecoration(
-        iconColor: Colors.teal,
-        
+        iconColor: Colors.black,
         labelText: label,
         prefixIcon: Icon(
           prefix,
@@ -49,7 +49,7 @@ Widget defaultFormField({
 
 Widget defaultButton({
   double width = double.infinity,
-  Color background = Colors.teal,
+  Color background = Colors.black38,
   bool isUpperCase = true,
   double radius = 3.0,
   required function,
@@ -81,35 +81,31 @@ Widget defaultTextButton({
 }) =>
     TextButton(
       onPressed: function,
-      child: Text(text,style: TextStyle(color: Colors.teal),),
+      child: Text(
+        text,
+      ),
     );
 
-
-
-    void navigateTo(context, widget) => Navigator.push(
+void navigateTo(context, widget) => Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => widget,
       ),
     );
 
-
-
 void navigateAndFinish(
-  context,  widget,
+  context,
+  widget,
 ) =>
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) => widget,
       ),
-      (route)
-      {
+      (route) {
         return false;
       },
     );
-    
-
 
 void showToast({
   required String text,
@@ -126,7 +122,7 @@ void showToast({
     );
 
 // enum
-enum ToastStates {SUCCESS, ERROR, WARNING}
+enum ToastStates { SUCCESS, ERROR, WARNING }
 
 Color chooseToastColor(ToastStates state) {
   Color color;
@@ -143,8 +139,7 @@ Color chooseToastColor(ToastStates state) {
   }
 
   return color;
-} 
-
+}
 
 Widget myDivider() => Padding(
       padding: const EdgeInsetsDirectional.only(
@@ -156,3 +151,67 @@ Widget myDivider() => Padding(
         color: Colors.grey[300],
       ),
     );
+
+showSticker(BuildContext context) {
+  return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return AnimatedContainer(
+          duration: Duration(seconds: 1),
+          curve: Curves.easeIn,
+          // ignore: sort_child_properties_last
+          child: Column(children: [
+            // ignore: prefer_const_constructors
+            Padding(
+              // ignore: unnecessary_const
+              padding: const EdgeInsets.symmetric(horizontal: 105.0),
+              child: Divider(
+                thickness: 4,
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / .5,
+              width: MediaQuery.of(context).size.width,
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('stickers')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return new Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return new GridView(
+                          children: snapshot.data!.docs
+                              .map((DocumentSnapshot documentsnap) {
+                            return GestureDetector(
+                              onTap: (){
+                              
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                child: Image.network(' '
+                                  //documentsnap.data()['image']
+                                ),
+                              ),
+                              );
+                          }).toList(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3));
+                    }
+                  }),
+            )
+          ]),
+          height: MediaQuery.of(context).size.height / .5,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12.0),
+            topRight: Radius.circular(12.0),
+          )),
+        );
+      });
+}

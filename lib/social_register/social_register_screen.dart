@@ -3,6 +3,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/myApp/profile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubit/cubit.dart';
 import '../helperClasses/components.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
@@ -39,7 +40,7 @@ class SocialRegisterScreen extends StatelessWidget {
 
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.teal,
+             backgroundColor:AppCubit.get(context).isDark?Color.fromARGB(255, 34, 31, 31): Color.fromARGB(255, 204, 200, 200),
             ),
             body: Center(
               child: SingleChildScrollView(

@@ -14,6 +14,8 @@ late User signedInUser;
 String? name;
 String? phone;
 String? image;
+String? email;
+String? bio;
 
 class Conversition extends StatefulWidget {
   const Conversition({Key? key}) : super(key: key);
@@ -136,12 +138,13 @@ class _ConversitionState extends State<Conversition> {
                 ),
               ),
            const messsageStreamBuilder(),
+            if(model!)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.teal,
+                    color: Colors.black,
                     width: 1.0,
                   ),
                   borderRadius: BorderRadius.circular(
@@ -180,12 +183,14 @@ class _ConversitionState extends State<Conversition> {
                         },
                         child:const Icon(
                           Icons.send,
-                          color: Colors.teal,
+                          color: Colors.black,
                         ))
                   ],
                 ),
               ),
             ),
+          
+          
           ],
         ),
       ),
@@ -195,7 +200,8 @@ class _ConversitionState extends State<Conversition> {
 
 class messsageStreamBuilder extends StatelessWidget {
   const messsageStreamBuilder({Key? key}) : super(key: key);
-
+   
+   
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -259,9 +265,12 @@ class messageLine extends StatelessWidget {
       );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return 
+    Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         images() ?? Text(' '),
@@ -270,8 +279,9 @@ class messageLine extends StatelessWidget {
             crossAxisAlignment:
                 isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
-              Text(name ?? ' ',
+              Text(email ?? ' ',
                   style: TextStyle(
+                    fontSize: 10.5,
                     color: AppCubit.get(context).isDark
                         ? Colors.grey
                         : Colors.black,
@@ -291,19 +301,21 @@ class messageLine extends StatelessWidget {
                             bottomRight: Radius.circular(30),
                           ),
                     color: isMe
-                        ? Colors.teal
-                        : AppCubit.get(context).isDark
+                        ?
+                         AppCubit.get(context).isDark
                             ? Color.fromARGB(255, 34, 31, 31)
-                            : Colors.grey,
-                    child: Padding(
+                            : Colors.black:AppCubit.get(context).isDark?Colors.white70: Color.fromARGB(255, 204, 200, 200)
+                    ,child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
                       child: Text(
                         '$text ',
                         overflow: TextOverflow.clip,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              fontSize: 15,
-                            ),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+              color:isMe? AppCubit.get(context).isDark?Colors.white: Colors.white:
+              AppCubit.get(context).isDark?Colors.black: Colors.black,
+
+                fontSize: 17),
                       ),
                     )),
               ),
@@ -312,5 +324,6 @@ class messageLine extends StatelessWidget {
         ),
       ],
     );
+  
   }
 }
